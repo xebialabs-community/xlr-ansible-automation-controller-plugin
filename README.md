@@ -14,5 +14,60 @@ The authentication page on the Ansible plugin allows users to securely access th
 ![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/fa278562-b226-4930-8369-3685473993bb)
 
 
+## Tasks List
+The plugin offers a range of tasks to :
+- Get information using an Ansible Automation Controller API's endpoint
+- Add or Remove a credential from a job template
+- Inventory list
+- Run job template
+- Wait for a job template status (asyn)
+- Run and wait for a job template to finish (sync)
+-
+
+![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/0e20285c-0e3f-4230-9074-d6f2897a4cfb)
+
+### Run a job template
+Input required properties are:
+- A valid Ansible Automation Controller server 
+- A Job Template ID or name
+Input optinal properties are: 
+- Extra vars: A string that represents a JSON or YAML formatted dictionary (with escaped parentheses) which includes variables given by the user, including answers to survey questions
+- Is Workflow : Check if it's a workflow job template
+![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/1d38e93d-3711-4259-b34d-32d96693ec36)
+
+### Wait for job status (async)
+Input properties:
+- Server: Ansible Automation Platform Controller Server to connect to
+- Username: Overwrite username if defined in connection for
+- Password: Overwrite password if defined in connection for
+- Api token: Overwrite API token if defined in connection form
+- Max_retries: Max retries default value is infinity
+- Wait_interval (required): Wait interval in seconds
+- Stop On Failure: if checked it fail task when job fails
+- Is workflow: Check if it's a workflow job template
 
 
+![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/85e1275f-0b72-47c8-95dc-50d21c3767ae)
+![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/5fd94c9b-cd6e-446a-a0d5-a8cd5877ba0a)
+
+### Run and wait for job status (sync)
+This task parameters are a fusion of the two previous tasks
+
+![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/0aa1f91f-22a3-49bb-9202-d503fd51bc88)
+![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/7a97596e-1aaa-40dd-9d83-0ba7c2fa413e)
+
+### Get infromation from API endpoint
+- Endpoint example:  /api/v2/me
+![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/301ecb23-fa29-479f-b3ba-f349da1293e3)
+
+### Get inventory List
+- Filter: Filter the inventory list. Empty to get the hole list. Example: ?page=1
+![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/31a50882-1b2f-4a5d-a1f3-0d6b50bd7ff0)
+
+
+### Add/Remove credential from a job template
+- Job template id
+- Credential id: Id of this credential
+- Remove: check if you want to disassociate the credential from the job template
+
+![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/1f282c18-5588-4135-ac55-edd9d01d10f6)
