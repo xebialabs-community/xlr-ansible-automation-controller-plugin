@@ -35,6 +35,10 @@ Input optinal properties are:
 - Is Workflow : Check if it's a workflow job template
 ![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/1d38e93d-3711-4259-b34d-32d96693ec36)
 
+#### Results example:
+![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/ccf85756-37c8-4fc4-8d54-ed3648b336a7)
+![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/4ac338c7-5404-4113-8550-4fbea4142e26)
+
 ### Wait for job status (async)
 Input properties:
 - Server: Ansible Automation Platform Controller Server to connect to
@@ -50,20 +54,33 @@ Input properties:
 ![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/85e1275f-0b72-47c8-95dc-50d21c3767ae)
 ![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/5fd94c9b-cd6e-446a-a0d5-a8cd5877ba0a)
 
+#### Results example:
+![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/4137d5f9-3bbe-420f-a6d3-9412a44219df)
+![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/04af168f-b3ea-4f0a-8ba5-54b20262e07b)
+
 ### Run and wait for job status (sync)
 This task parameters are a fusion of the two previous tasks
 
 ![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/0aa1f91f-22a3-49bb-9202-d503fd51bc88)
 ![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/7a97596e-1aaa-40dd-9d83-0ba7c2fa413e)
 
+#### Results example:
+![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/7e822fb0-c0dc-4cba-bfa1-b801bb84ff46)
+![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/6eb06c6f-c66d-4390-9168-9c38e5a6487d)
+
 ### Get infromation from API endpoint
 - Endpoint example:  /api/v2/me
 ![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/301ecb23-fa29-479f-b3ba-f349da1293e3)
 
+#### Results example:
+![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/c1938b2e-fefe-4751-b4de-cb244f643c73)
+
 ### Get inventory List
 - Filter: Filter the inventory list. Empty to get the hole list. Example: ?page=1
 ![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/31a50882-1b2f-4a5d-a1f3-0d6b50bd7ff0)
+#### Results example:
 
+![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/73e1013d-f3f8-4a3e-aa54-313576f749ca)
 
 ### Add/Remove credential from a job template
 - Job template id
@@ -71,3 +88,4 @@ This task parameters are a fusion of the two previous tasks
 - Remove: check if you want to disassociate the credential from the job template
 
 ![image](https://github.com/MahdiSMIDA/xlr-ansible-automation-controller-plugin/assets/23388936/1f282c18-5588-4135-ac55-edd9d01d10f6)
+
