@@ -1,0 +1,155 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<synthetic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://www.xebialabs.com/deployit/synthetic"
+	xsi:schemaLocation="http://www.xebialabs.com/deployit/synthetic synthetic.xsd">
+    <!--
+        #######################################################################################################################
+        #
+        #                 Ansible Automation Platform Controller  Configuration 
+        #
+        #######################################################################################################################
+    -->
+
+    <type type="ansibletower.Server" extends="configuration.HttpConnection" label="Ansible Automation Platform Controller : Server" description="Connection definition for Ansible Automation Platform Controller Server">
+	<!--property name="url" required="true" label="Your Ansible Tower URL" /-->
+	<property name="checkConfigurationPath" hidden="true" default="/api/v2/"/>
+	<property name="scriptLocation" hidden="true" default="ansibletower/httpConnectionCheck.py"/>
+        <property name="apiToken" password="true" label="API Token" description="Username is required if using API Token" required="false"
+		category="Authentication"/>
+        <!-- Hide the fields which are not relevant for the ansible tower integration -->
+        <property name="domain" default="empty" hidden="true"/>
+        <property name="clientId" default="empty" hidden="true"/>
+        <property name="clientSecret" default="empty" hidden="true" password="true"/>
+        <property name="scope" default="empty" hidden="true"/>
+        <property name="accessTokenUrl" default="empty" hidden="true"/>
+        <property name="authenticationMethod" kind="enum"
+                  enum-class="com.xebialabs.xlrelease.domain.configuration.HttpConnection$AuthenticationMethod"
+                  hidden="true" default="Basic">
+            <enum-values>
+                <value>Basic</value>
+            </enum-values>
+        </property>
+   </type>
+    
+    <!--
+        #######################################################################################################################
+        #
+        #                 Abstraction Task on Ansible Automation Platform Controller 
+        #
+        #######################################################################################################################
+    -->
+
+   <type type="ansibletower.Task" extends="xlrelease.PythonScript" virtual="true">
+      <property name="taskColor" hidden="true" default="#262263"/>
+      <property name="iconLocation" default="logo/aap.svg" hidden="true"/>
+      <property category="input" name="ansibletower" referenced-type="ansibletower.Server" kind="ci" label="Server" required="true" description="Ansible Automation Platform Controller Server to connect to"/>
+      <property category="input" name="username" required="false" description="Optionally, override the username used to connect to the server"/>
+      <property category="input" name="password" password="true" required="false" description="Optionally, override the password used to connect to the server"/>
+      <property name="apiToken" password="true" label="API Token" category="input" required="false" description="Overrides the API token used to connect to the server"/>
+   </type>
+
+    <!--
+        #######################################################################################################################
+        #
+        #                 Task Launch a Job Template Ansible Automation Platform Controller  (POST)
+        #
+        #######################################################################################################################
+    -->
+
+    <type type="ansibletower.runJobTemplate" extends="ansibletower.Task" label="Run job template" description="Run job template">
+      <property name="scriptLocation" default="ansibletower/runJobTemplate.py" hidden="true"/>
+      <property category="input" name="job_template_id" label="Job Template" required="true" description="Job template id or name (id of the workflow job template)"/>
+      <property category="input" name="extra_vars" required="false" description="A string that represents a JSON or YAML formatted dictionary (with escaped parentheses) which includes variables given by the user, including answers to survey questions" default=""/> 
+      <property name="isWorkflow" kind="boolean" category="input" required="false" default="false" description="Check if it's a workflow job template" />
+      
+      <property name="result" label="API response" category="output"/>
+      <property name="job_id" label="Job id" category="output"/>
+    </type>
+
+    <!--
+        #######################################################################################################################
+        #
+        #                 Task Wait for job status on Ansible Automation Platform Controller  (GET)
+        #
+        #######################################################################################################################
+    -->
+
+    <type type="ansibletower.waitForJobStatus" extends="ansibletower.Task" label="Wait for job status" description="Wait for job status (Async)">
+      <property name="scriptLocation" default="ansibletower/waitForJobStatusPrime.py" hidden="true"/>
+      <property category="input" name="job_id" required="true" description="Job id"/>
+      <property category="input" name="max_retries" required="false" description="Max retries default value is infinity" />
+      <property category="input" name="wait_interval" required="true" description="Wait interval in seconds" default="60"/>
+      <property name="stopOnFailure" kind="boolean" category="input" required="false" default="true" description="Fail task when job fails" />     
+      <property name="isWorkflow" kind="boolean" category="input" required="false" default="false" description="Check if it's a workflow job template" />      
+      <property name="result" label="Job output" category="output"/>
+      <property name="status" label="Job status" category="output"/>
+      </type>
+
+    <!--
+        #######################################################################################################################
+        #
+        #                 Task fusion Launch job_template and wait for job status on Ansible Automation Platform Controller  (POST & GET)
+        #
+        #######################################################################################################################
+    -->
+      
+
+    <type type="ansibletower.launchAndWait" extends="ansibletower.Task" label="Run job template and wait for status" description="Run job template and wait for status (Sync)">
+      <property name="scriptLocation" default="ansibletower/launchAndWait.py" hidden="true"/>
+      <property category="input" name="job_template_id" label="Job Template" required="true" description="Job Template Name or id (id of the workflow job template)"/>
+      <property category="input" name="extra_vars" required="false" description="A string that represents a JSON or YAML formatted dictionary (with escaped parentheses) which includes variables given by the user, including answers to survey questions" default=""/>
+      <property name="stopOnFailure" kind="boolean" category="input" required="false" default="true" description="Fail task when job fails" />      
+      <property category="input" name="max_retries" required="false" description="Max retries default value is infinity" />
+      <property name="isWorkflow" kind="boolean" category="input" required="false" default="false" description="Check if it's a workflow job template" />      
+      <property category="input" name="wait_interval" required="true" description="Wait interval in seconds" default="60"/>
+      <property name="result" label="Job output" category="output"/>
+      <property name="job_id" label="Job id" category="output"/>
+      <property name="status" label="Job status" category="output"/>
+      </type>
+
+    <!--
+        #######################################################################################################################
+        #
+        #                 Task get inventory list on Ansible Automation Platform Controller  (GET)
+        #
+        #######################################################################################################################
+    -->
+
+    <type type="ansibletower.inventoryList" extends="ansibletower.Task" label="Inventory list" description="Inventory list">
+      <property name="scriptLocation" default="ansibletower/inventoryList.py" hidden="true"/>
+      <property category="input" name="inventory_filter" label='Filter' required="false" description="Filter the inventory list. Empty to get the hole list. Example: ?page=1" />
+      <property name="result" label="API output" category="output"/>
+      </type>
+
+
+    <!--
+        #######################################################################################################################
+        #
+        #                 Task get information on Ansible Automation Platform Controller  (GET)
+        #
+        #######################################################################################################################
+    -->
+
+    <type type="ansibletower.me" extends="ansibletower.Task" label="Get information using API endpoint" description="Retrieve information about the current user">
+      <property name="scriptLocation" default="ansibletower/me.py" hidden="true"/>
+      <property category="input" name="Endpoint" label='Endpoint' required="true" description="Endpoint" />
+      <property name="result" label="API output" category="output"/>
+      </type>
+
+    <!--
+        #######################################################################################################################
+        #
+        #                 Task add Credential for a Job Template on Ansible Automation Platform Controller  (POST)
+        #
+        #######################################################################################################################
+    -->
+
+      <type type="ansibletower.createCredential" extends="ansibletower.Task" label="Add/Remove credential for a job template" description="Run job template">
+      <property name="scriptLocation" default="ansibletower/addCredential.py" hidden="true"/>
+      <property category="input" name="job_template_id" label="Job Template id" required="true" description="Job template id or name "/>
+      <property category="input" name="cred_id" label="Credential id" kind="integer" required="true" description="Id of this credential"/>
+      <property name="Remove" kind="boolean" category="input" required="false" default="false" description="Remove the credential from the job template"/>      
+      <property name="result" label="API output" category="output"/>   
+    </type>
+            
+</synthetic>
