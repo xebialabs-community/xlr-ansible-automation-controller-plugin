@@ -29,7 +29,7 @@ SOFTWARE.
     <!--
         #######################################################################################################################
         #
-        #                 Ansible Automation Platform Controller  Configuration 
+        #                 Ansible Automation Platform Controller  Configuration
         #
         #######################################################################################################################
     -->
@@ -54,11 +54,11 @@ SOFTWARE.
             </enum-values>
         </property>
    </type>
-    
+
     <!--
         #######################################################################################################################
         #
-        #                 Abstraction Task on Ansible Automation Platform Controller 
+        #                 Abstraction Task on Ansible Automation Platform Controller
         #
         #######################################################################################################################
     -->
@@ -83,9 +83,9 @@ SOFTWARE.
     <type type="ansibletower.runJobTemplate" extends="ansibletower.Task" label="Run job template" description="Run job template">
       <property name="scriptLocation" default="ansibletower/runJobTemplate.py" hidden="true"/>
       <property category="input" name="job_template_id" label="Job Template" required="true" description="Job template id or name (id of the workflow job template)"/>
-      <property category="input" name="extra_vars" required="false" description="A string that represents a JSON or YAML formatted dictionary (with escaped parentheses) which includes variables given by the user, including answers to survey questions" default=""/> 
+      <property category="input" name="extra_vars" required="false" description="A string that represents a JSON or YAML formatted dictionary (with escaped parentheses) which includes variables given by the user, including answers to survey questions" default=""/>
       <property name="isWorkflow" kind="boolean" category="input" required="false" default="false" description="Check if it's a workflow job template" />
-      
+
       <property name="result" label="API response" category="output"/>
       <property name="job_id" label="Job id" category="output"/>
     </type>
@@ -103,8 +103,8 @@ SOFTWARE.
       <property category="input" name="job_id" required="true" description="Job id"/>
       <property category="input" name="max_retries" required="false" description="Max retries default value is infinity" />
       <property category="input" name="wait_interval" required="true" description="Wait interval in seconds" default="60"/>
-      <property name="stopOnFailure" kind="boolean" category="input" required="false" default="true" description="Fail task when job fails" />     
-      <property name="isWorkflow" kind="boolean" category="input" required="false" default="false" description="Check if it's a workflow job template" />      
+      <property name="stopOnFailure" kind="boolean" category="input" required="false" default="true" description="Fail task when job fails" />
+      <property name="isWorkflow" kind="boolean" category="input" required="false" default="false" description="Check if it's a workflow job template" />
       <property name="result" label="Job output" category="output"/>
       <property name="status" label="Job status" category="output"/>
       </type>
@@ -116,15 +116,18 @@ SOFTWARE.
         #
         #######################################################################################################################
     -->
-      
+
 
     <type type="ansibletower.launchAndWait" extends="ansibletower.Task" label="Run job template and wait for status" description="Run job template and wait for status (Sync)">
       <property name="scriptLocation" default="ansibletower/launchAndWait.py" hidden="true"/>
       <property category="input" name="job_template_id" label="Job Template" required="true" description="Job Template Name or id (id of the workflow job template)"/>
-      <property category="input" name="extra_vars" required="false" description="A string that represents a JSON or YAML formatted dictionary (with escaped parentheses) which includes variables given by the user, including answers to survey questions" default=""/>
-      <property name="stopOnFailure" kind="boolean" category="input" required="false" default="true" description="Fail task when job fails" />      
+      <!-- <property category="input" name="extra_vars" required="false" description="A string that represents a JSON or YAML formatted dictionary (with escaped parentheses) which includes variables given by the user, including answers to survey questions" default=""/> -->
+      <property name="extra_vars" category="input" kind="map_string_string" required="false" description="A map that represents a JSON or YAML formatted dictionary (with escaped parentheses) which includes variables given by the user, including answers to survey questions" />
+      <property name="jobTags" category="input" kind="list_of_string" required="false" />
+      <property name="credentials" category="input" kind="list_of_string" required="false" />
+      <property name="stopOnFailure" kind="boolean" category="input" required="false" default="true" description="Fail task when job fails" />
       <property category="input" name="max_retries" required="false" description="Max retries default value is infinity" />
-      <property name="isWorkflow" kind="boolean" category="input" required="false" default="false" description="Check if it's a workflow job template" />      
+      <property name="isWorkflow" kind="boolean" category="input" required="false" default="false" description="Check if it's a workflow job template" />
       <property category="input" name="wait_interval" required="true" description="Wait interval in seconds" default="60"/>
       <property name="result" label="Job output" category="output"/>
       <property name="job_id" label="Job id" category="output"/>
@@ -172,8 +175,8 @@ SOFTWARE.
       <property name="scriptLocation" default="ansibletower/addCredential.py" hidden="true"/>
       <property category="input" name="job_template_id" label="Job Template id" required="true" description="Job template id or name "/>
       <property category="input" name="cred_id" label="Credential id" kind="integer" required="true" description="Id of this credential"/>
-      <property name="Remove" kind="boolean" category="input" required="false" default="false" description="Remove the credential from the job template"/>      
-      <property name="result" label="API output" category="output"/>   
+      <property name="Remove" kind="boolean" category="input" required="false" default="false" description="Remove the credential from the job template"/>
+      <property name="result" label="API output" category="output"/>
     </type>
-            
+
 </synthetic>
