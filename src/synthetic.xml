@@ -132,6 +132,7 @@ SOFTWARE.
       <property name="result" label="Job output" category="output"/>
       <property name="job_id" label="Job id" category="output"/>
       <property name="status" label="Job status" category="output"/>
+      <property name="num_tries" category="output" kind="integer" />
       </type>
 
     <!--

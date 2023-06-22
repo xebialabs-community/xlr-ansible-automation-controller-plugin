@@ -26,52 +26,42 @@ from ansibletower import AAPServer
 import time
 import sys
 
-def create_payload(extra_vars, jobTags, credentials):
-    body = {}
-    body['extra_vars'] = extra_vars
-    body['job_tags'] = ",".join(jobTags)
-    body['credentials'] = credentials
-    body_as_string = json.dumps(body)
-    print "Body returned from create_payload() is %s" % body_as_string
-    return body_as_string
-
 def formatted_print(message):
     print("```")
     print(message)
     print("```")
     print("\n")
 
-if not ansibletower:
-    print("Ansible Tower Server  must be provided")
-    sys.exit(1)
-
-if wait_interval is None:
-    print("wait interval must be provided")
-    sys.exit(1)
-
 ansible_instance = AAPServer(ansibletower, username, password, apiToken)
 request = ansible_instance.create_request()
 headers = ansible_instance.create_header(request)
 
 if isWorkflow:
-    launch_path_component = "workflow_job_templates"
-    message_text = "workflow job template"
+    status_path_component = "workflow_jobs"
+    link_message = "* [>>> Job %s Link](%s/#/jobs/workflow/%s/output) <<<"
 else:
-    launch_path_component = "job_templates"
-    message_text = "job template"
+    status_path_component = "jobs"
+    link_message = "* [>>> Job %s Link](%s/#/jobs/%s) <<<"
 
-launch_api_url = '/api/v2/%s/%s/launch/' % (launch_path_component, job_template_id)
-body_as_string = create_payload(extra_vars, jobTags, credentials)
-response = request.post(launch_api_url,body=body_as_string,contentType="application/json",headers=headers)
-result = json.loads(response.response)
+api_url =  '/api/v2/%s/%s/' % (status_path_component, job_id)
 
-if not response.isSuccessful():
-  print("Failed to run the %s. Server return [%s], with content [%s]" % (message_text, response.status, response.response))
-  sys.exit(1)
+response = request.get(api_url, contentType='application/json',headers=headers)
+if response.isSuccessful():
+    result = json.loads(response.response)
+    status=result['status']
+    print status
+    if status in ["running","pending","waiting"]:
+        num_tries += 1
+        if max_retries:
+            if num_tries > max_retries:
+                raise Exception("Error: maximum number of tries reached")
+        task.schedule("ansibletower/launchAndWait.wait_for_completion.py", int(wait_interval))
+else:
+    raise Exception("Failed: Server return [%s], with content [%s]" % (response.status, response.response))
 
-job_id= result["id"]
-num_tries = 0
-
-formatted_print(">>> %s launched with job id  %s" % (message_text.capitalize(), str(job_id)))
-
-task.schedule("ansibletower/launchAndWait.wait_for_completion.py", int(wait_interval))
+formatted_print(">>> Task completed after " + str(num_tries) + " tries with status "+ status)
+job_output=request.get(api_url+'stdout/', contentType='text/plain',headers=headers).response
+formatted_print(job_output)
+print(link_message % (str(job_id), ansibletower['url'], str(job_id)))
+print("\n")
+result= job_output
