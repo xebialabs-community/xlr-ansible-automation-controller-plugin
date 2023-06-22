@@ -32,8 +32,6 @@ def formatted_print(message):
     print("```")
     print("\n")
 
-def print_job_output():
-
 ansible_instance = AAPServer(ansibletower, username, password, apiToken)
 request = ansible_instance.create_request()
 headers = ansible_instance.create_header(request)
