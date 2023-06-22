@@ -32,6 +32,8 @@ def formatted_print(message):
     print("```")
     print("\n")
 
+def print_job_output():
+
 ansible_instance = AAPServer(ansibletower, username, password, apiToken)
 request = ansible_instance.create_request()
 headers = ansible_instance.create_header(request)
@@ -46,23 +48,25 @@ else:
 api_url =  '/api/v2/%s/%s/' % (status_path_component, job_id)
 
 response = request.get(api_url, contentType='application/json',headers=headers)
+num_tries += 1
 if response.isSuccessful():
     result = json.loads(response.response)
     status=result['status']
-    print status
-    task.setStatusLine("Job id %s %s" % (job_id, status))        
+    task.setStatusLine("Job id %s %s" % (job_id, status))
+    formatted_print(">>> Task status after " + str(num_tries) + " tries is "+ status)
+    print(link_message % (str(job_id), ansibletower['url'], str(job_id)))
+    print("\n")
     if status in ["running","pending","waiting"]:
-        num_tries += 1
         if max_retries:
             if num_tries > max_retries:
+                job_output=request.get(api_url+'stdout/', contentType='text/plain',headers=headers).response
+                formatted_print(job_output)
                 raise Exception("Error: maximum number of tries reached")
         task.schedule("ansibletower/launchAndWait.wait_for_completion.py", int(wait_interval))
 else:
+    formatted_print(">>> Task failed after " + str(num_tries) + " tries.")
     raise Exception("Failed: Server return [%s], with content [%s]" % (response.status, response.response))
 
-formatted_print(">>> Task completed after " + str(num_tries) + " tries with status "+ status)
 job_output=request.get(api_url+'stdout/', contentType='text/plain',headers=headers).response
 formatted_print(job_output)
-print(link_message % (str(job_id), ansibletower['url'], str(job_id)))
-print("\n")
 result= job_output
