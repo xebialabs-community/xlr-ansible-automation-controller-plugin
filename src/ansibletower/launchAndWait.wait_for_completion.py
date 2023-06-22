@@ -61,10 +61,10 @@ if response.isSuccessful():
                 formatted_print(job_output)
                 raise Exception("Error: maximum number of tries reached")
         task.schedule("ansibletower/launchAndWait.wait_for_completion.py", int(wait_interval))
+    else:
+        job_output=request.get(api_url+'stdout/', contentType='text/plain',headers=headers).response
+        formatted_print(job_output)
+        result = job_output
 else:
-    formatted_print(">>> Task failed after " + str(num_tries) + " tries.")
+    formatted_print(">>> Task failed after " + str(num_tries) + " tries.  Job status was not retrieved.")
     raise Exception("Failed: Server return [%s], with content [%s]" % (response.status, response.response))
-
-job_output=request.get(api_url+'stdout/', contentType='text/plain',headers=headers).response
-formatted_print(job_output)
-result= job_output
