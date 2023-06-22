@@ -74,4 +74,5 @@ num_tries = 0
 
 formatted_print(">>> %s launched with job id  %s" % (message_text.capitalize(), str(job_id)))
 
+task.setStatusLine("Job id %s launched" % job_id)
 task.schedule("ansibletower/launchAndWait.wait_for_completion.py", int(wait_interval))

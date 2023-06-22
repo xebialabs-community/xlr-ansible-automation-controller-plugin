@@ -50,6 +50,7 @@ if response.isSuccessful():
     result = json.loads(response.response)
     status=result['status']
     print status
+    task.setStatusLine("Job id %s %s" % (job_id, status))        
     if status in ["running","pending","waiting"]:
         num_tries += 1
         if max_retries:
