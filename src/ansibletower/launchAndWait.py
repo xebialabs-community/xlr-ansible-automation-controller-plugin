@@ -32,8 +32,7 @@ def create_payload(extra_vars, jobTags, credentials):
         body['extra_vars'] = extra_vars
     if jobTags:
         body['job_tags'] = ",".join(jobTags)
-    if credentials:
-        body['credentials'] = credentials
+    body['credentials'] = credentials
     body_as_string = json.dumps(body)
     print "Body returned from create_payload() is %s" % body_as_string
     return body_as_string
