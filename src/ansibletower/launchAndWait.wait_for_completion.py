@@ -45,6 +45,13 @@ else:
 
 api_url =  '/api/v2/%s/%s/' % (status_path_component, job_id)
 
+unavailable_status_recommendations = """
+The Ansible server did not return a timely response. The server or network may be overloaded.\n" +
+Recommendations:
+Use a global variable for the wait interval and increase its value to lighten the load on the server.
+Use a global variable for max tries and adjust it inversely to accommodate expected execution durations.
+"""
+
 response = request.get(api_url, contentType='application/json',headers=headers)
 num_tries += 1
 if response.isSuccessful():
@@ -68,6 +75,24 @@ if response.isSuccessful():
         if status in ["failed"]:
             formatted_print(">>> Job failed after " + str(num_tries) + " tries")
             raise Exception("Error: job failed")
+elif response.getStatus() == 503:
+    task.setStatusLine("Job id %s status unavailable (503)")
+    formatted_print(">>> Job status after " + str(num_tries) + " tries is unavailable: HTTP status 503, Service Unavailable." + unavailable_status_recommendations)
+    if max_retries:
+        if num_tries > max_retries:
+            job_output=request.get(api_url+'stdout/', contentType='text/plain',headers=headers).response
+            formatted_print(job_output)
+            raise Exception("Error: maximum number of tries reached")
+    task.schedule("ansibletower/launchAndWait.wait_for_completion.py", int(wait_interval))
+elif response.getStatus() == 504:
+    task.setStatusLine("Job id %s status unavailable (504)")
+    formatted_print(">>> Job status after " + str(num_tries) + " tries is unavailable: HTTP status 504, Gateway Timeout." + unavailable_status_recommendations)
+    if max_retries:
+        if num_tries > max_retries:
+            job_output=request.get(api_url+'stdout/', contentType='text/plain',headers=headers).response
+            formatted_print(job_output)
+            raise Exception("Error: maximum number of tries reached")
+    task.schedule("ansibletower/launchAndWait.wait_for_completion.py", int(wait_interval))
 else:
     formatted_print(">>> Task failed after " + str(num_tries) + " tries.  Job status was not retrieved.")
     raise Exception("Error: server returned [%s], with content [%s]" % (response.status, response.response))
