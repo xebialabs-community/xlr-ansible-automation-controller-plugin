@@ -26,10 +26,12 @@ from ansibletower import AAPServer
 import time
 import sys
 
-def create_payload(extra_vars, jobTags, credentials):
+def create_payload(extra_vars_text, jobTags, credentials):
     body = {}
-    if extra_vars:
-        body['extra_vars'] = extra_vars
+    if extra_vars_text:
+        body['extra_vars'] = extra_vars_text
+#    if extra_vars:
+#        body['extra_vars'] = extra_vars
     if jobTags:
         body['job_tags'] = ",".join(jobTags)
     if credentials:
@@ -64,7 +66,7 @@ else:
     message_text = "job template"
 
 launch_api_url = '/api/v2/%s/%s/launch/' % (launch_path_component, job_template_id)
-body_as_string = create_payload(extra_vars, jobTags, credentials)
+body_as_string = create_payload(extra_vars_text, jobTags, credentials)
 response = request.post(launch_api_url,body=body_as_string,contentType="application/json",headers=headers)
 result = json.loads(response.response)
 

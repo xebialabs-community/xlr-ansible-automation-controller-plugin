@@ -123,6 +123,7 @@ SOFTWARE.
       <property category="input" name="job_template_id" label="Job Template" required="true" description="Job Template Name or id (id of the workflow job template)"/>
       <!-- <property category="input" name="extra_vars" required="false" description="A string that represents a JSON or YAML formatted dictionary (with escaped parentheses) which includes variables given by the user, including answers to survey questions" default=""/> -->
       <property name="extra_vars" category="input" kind="map_string_string" required="false" description="A map that represents a JSON or YAML formatted dictionary (with escaped parentheses) which includes variables given by the user, including answers to survey questions" />
+      <property name="extra_vars_text" category="input" required="false" size="large" description="A string that represents a JSON or YAML formatted dictionary (with escaped parentheses) which includes variables given by the user, including answers to survey questions" />
       <property name="jobTags" category="input" kind="list_of_string" required="false" />
       <property name="credentials" category="input" kind="list_of_string" required="false" />
       <property name="stopOnFailure" kind="boolean" category="input" required="false" default="true" description="Fail task when job fails" />
