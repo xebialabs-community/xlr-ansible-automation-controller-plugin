@@ -74,7 +74,10 @@ if response.isSuccessful():
         result = job_output
         if status in ["failed"]:
             formatted_print(">>> Job failed after " + str(num_tries) + " tries")
-            raise Exception("Error: job failed")
+            if stopOnFailure:
+                raise Exception("Error: job failed")
+            else:
+                print "Error: job failed"
 elif response.getStatus() == 503:
     task.setStatusLine("Job id %s status unavailable (503)")
     formatted_print(">>> Job status after " + str(num_tries) + " tries is unavailable: HTTP status 503, Service Unavailable." + unavailable_status_recommendations)

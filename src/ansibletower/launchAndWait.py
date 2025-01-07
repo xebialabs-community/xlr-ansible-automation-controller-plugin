@@ -26,6 +26,8 @@ from ansibletower import AAPServer
 import time
 import sys
 
+print "Executing ansibletower.launchAndWait.py v1.1.15"
+
 def create_payload(extra_vars_text, jobTags, credentials):
     body = {}
     if extra_vars_text:
