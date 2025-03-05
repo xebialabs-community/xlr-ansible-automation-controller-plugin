@@ -57,6 +57,7 @@ num_tries += 1
 if response.isSuccessful():
     result = json.loads(response.response)
     status=result['status']
+    failed = result['failed']
     task.setStatusLine("Job id %s %s" % (job_id, status))
     formatted_print(">>> Job status after " + str(num_tries) + " tries is "+ status)
     print(link_message % (str(job_id), ansibletower['url'], str(job_id)))
@@ -72,7 +73,7 @@ if response.isSuccessful():
         job_output=request.get(api_url+'stdout/', contentType='text/plain',headers=headers).response
         formatted_print(job_output)
         result = job_output
-        if status in ["failed"]:
+        if (status in ["failed"]) or (status in ["error"] and failed):
             formatted_print(">>> Job failed after " + str(num_tries) + " tries")
             if stopOnFailure:
                 raise Exception("Error: job failed")
