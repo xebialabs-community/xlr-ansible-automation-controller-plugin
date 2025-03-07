@@ -73,7 +73,7 @@ if response.isSuccessful():
         job_output=request.get(api_url+'stdout/', contentType='text/plain',headers=headers).response
         formatted_print(job_output)
         result = job_output
-        if status in ["failed", "error"] or failed:
+        if status in ["failed", "error", "canceled"] or failed:
             formatted_print(">>> Job failed after " + str(num_tries) + " tries")
             if stopOnFailure:
                 raise Exception("Error: job failed")
